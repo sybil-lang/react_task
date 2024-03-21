@@ -1,19 +1,33 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
+
+// ConfirmationDialog component for delete confirmation
+const ConfirmationDialog = ({ isOpen, onCancel, onContinue }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50">
+      <div className="bg-white p-4 rounded shadow-lg">
+        <p>Are you sure you want to delete this record?</p>
+        <div className="flex justify-end mt-4">
+          <button onClick={onCancel} className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded mr-2">Cancel</button>
+          <button onClick={onContinue} className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">Continue</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default function ProductList() {
-  // const formDataArray = JSON.parse(localStorage.getItem('formData')) || [];
   const [formDataArray, setFormDataArray] = useState(JSON.parse(localStorage.getItem('formData')) || []);
-  const navigate = useNavigate()
-
-  // Get the location object
+  const [confirmationOpen, setConfirmationOpen] = useState(false);
+  const [deleteIndex, setDeleteIndex] = useState(null);
+  const navigate = useNavigate();
   const location = useLocation();
-
-  // Access the state object from location
   const updatedData = location.state && location.state.updatedData;
 
   useEffect(() => {
     if (location.state && location.state.updatedData) {
-      // Update formDataArray with the updated data
       setFormDataArray(prevData => [
         ...(prevData || []),
         location.state.updatedData
@@ -25,22 +39,28 @@ export default function ProductList() {
     console.log(formDataArray);
   }, [formDataArray]);
 
-
-  // Check if formDataArray is undefined or not an array before mapping
-  if (!Array.isArray(formDataArray) || formDataArray.length === 0) {
-    return <div>No data available.</div>;
-  }
-
   const handleDelete = (productIndex, vendorIndex, variantIndex) => {
-    // Create a copy of the formDataArray
-    const updatedFormDataArray = [...formDataArray];
-    // Remove the specified variant from the vendors array
-    updatedFormDataArray[productIndex].vendors[vendorIndex].variants.splice(variantIndex, 1);
-    // Update localStorage with the updated data
-    localStorage.setItem('formData', JSON.stringify(updatedFormDataArray));
-    // Update the component state with the updated data
-    setFormDataArray(updatedFormDataArray);
+    setDeleteIndex({ productIndex, vendorIndex, variantIndex });
+    setConfirmationOpen(true);
   };
+
+  const handleContinueDelete = () => {
+    if (deleteIndex !== null) {
+      const { productIndex, vendorIndex, variantIndex } = deleteIndex;
+      const updatedFormDataArray = [...formDataArray];
+      updatedFormDataArray[productIndex].vendors[vendorIndex].variants.splice(variantIndex, 1);
+      localStorage.setItem('formData', JSON.stringify(updatedFormDataArray));
+      setFormDataArray(updatedFormDataArray);
+    }
+    setDeleteIndex(null);
+    setConfirmationOpen(false);
+  };
+
+  const handleCancelDelete = () => {
+    setDeleteIndex(null);
+    setConfirmationOpen(false);
+  };
+
   const handleEdit = (productIndex, vendorIndex, variantIndex) => {
     const editUrl = `/edit/${productIndex}/${vendorIndex}/${variantIndex}`;
     const rowData = {
@@ -52,9 +72,18 @@ export default function ProductList() {
     navigate(editUrl, { state: { rowData } });
   };
 
+  if (!Array.isArray(formDataArray) || formDataArray.length === 0) {
+    return <div>No data available.</div>;
+  }
 
   return (
     <div className="px-4 sm:px-6 lg:px-8">
+       <h2 className="text-2xl font-bold mb-4 text-center"> Your Product</h2>
+      <ConfirmationDialog
+        isOpen={confirmationOpen}
+        onCancel={handleCancelDelete}
+        onContinue={handleContinueDelete}
+      />
       <div className="mt-8 flow-root">
         <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
@@ -76,7 +105,6 @@ export default function ProductList() {
                   <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                     Action
                   </th>
-
                 </tr>
               </thead>
               <tbody className="bg-white">
@@ -104,7 +132,6 @@ export default function ProductList() {
                     ))
                   ))
                 ))}
-
               </tbody>
             </table>
           </div>
