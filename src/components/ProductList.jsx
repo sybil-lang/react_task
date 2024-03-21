@@ -1,67 +1,81 @@
-import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useState } from "react";
 
-const ProductList = () => {
-  const location = useLocation();
-  const { formData } = location.state;
+export default function ProductList() {
+  // const formDataArray = JSON.parse(localStorage.getItem('formData')) || [];
+  const [formDataArray, setFormDataArray] = useState(JSON.parse(localStorage.getItem('formData')) || []);
 
-  const [products, setProducts] = useState(formData.vendors);
 
-  const handleEdit = (index) => {
-    // Implement edit logic here, e.g., navigate to an edit page
-    console.log("Edit clicked for index:", index);
+  const handleDelete = (productIndex, vendorIndex, variantIndex) => {
+    // Create a copy of the formDataArray
+    const updatedFormDataArray = [...formDataArray];
+    // Remove the specified variant from the vendors array
+    updatedFormDataArray[productIndex].vendors[vendorIndex].variants.splice(variantIndex, 1);
+    // Update localStorage with the updated data
+    localStorage.setItem('formData', JSON.stringify(updatedFormDataArray));
+    // Update the component state with the updated data
+    setFormDataArray(updatedFormDataArray);
   };
 
-  const handleDelete = (index) => {
-    const updatedProducts = [...products];
-    updatedProducts.splice(index, 1);
-    setProducts(updatedProducts);
+  const handleEdit = (productIndex, vendorIndex, variantIndex) => {
+    // Implement edit functionality here
   };
 
   return (
-    <div className="max-w-4xl mx-auto mt-8">
-      <h1 className="text-2xl font-bold mb-4">Product Data</h1>
-      <table className="min-w-full bg-white">
-        <thead>
-          <tr>
-            <th className="py-2 px-4 border">Name</th>
-            <th className="py-2 px-4 border">Vendors</th>
-            <th className="py-2 px-4 border">Variants</th>
-            <th className="py-2 px-4 border">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {products.map((vendor, index) => (
-            <tr key={index}>
-              <td className="py-2 px-4 border">{formData.name}</td>
-              <td className="py-2 px-4 border">{vendor.nameV}</td>
-              <td className="py-2 px-4 border">
-                {vendor.variants.map((variant, vIndex) => (
-                  <div key={vIndex}>
-                    Size: {variant.size}
-                  </div>
+    <div className="px-4 sm:px-6 lg:px-8">
+      <div className="mt-8 flow-root">
+        <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+          <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+            <table className="min-w-full divide-y divide-gray-300">
+              <thead>
+                <tr>
+                  <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3">
+                    Product Name
+                  </th>
+                  <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                    Description
+                  </th>
+                  <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                    Vendor
+                  </th>
+                  <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                    Size
+                  </th>
+                  <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                    Action
+                  </th>
+                 
+                </tr>
+              </thead>
+              <tbody className="bg-white">
+                {formDataArray.map((formData, productIndex) => (
+                  formData.vendors.map((vendor, vendorIndex) => (
+                    vendor.variants.map((variant, variantIndex) => (
+                      <tr key={`${productIndex}-${vendorIndex}-${variantIndex}`} className="even:bg-gray-50">
+                        <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3">
+                          {formData.name}
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{formData.description}</td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{vendor.nameV}</td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{variant.size}</td>
+                        <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-3">
+                          <div className="flex">
+                            <button onClick={() => handleEdit(productIndex, vendorIndex, variantIndex)} className="text-white bg-blue-500 hover:bg-blue-700 rounded py-1 px-3 mr-2">
+                              Edit
+                            </button>
+                            <button onClick={() => handleDelete(productIndex, vendorIndex, variantIndex)} className="text-white bg-red-500 hover:bg-red-700 rounded py-1 px-3">
+                              Delete
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  ))
                 ))}
-              </td>
-              <td className="py-2 px-4 border">
-                <button
-                  onClick={() => handleEdit(index)}
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => handleDelete(index)}
-                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-2"
-                >
-                  Delete
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
-  );
-};
-
-export default ProductList;
+  )
+}

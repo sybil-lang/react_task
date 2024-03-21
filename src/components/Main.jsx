@@ -34,15 +34,22 @@ const initialValues = {
 const Main = () => {
     const navigate = useNavigate();
 
-    const [formDataArray, setFormDataArray] = useState([]); // Add this line to initialize formDataArray state
+    const [formDataArray, setFormDataArray] = useState(() => {
+        // Retrieve form data from local storage when the component mounts
+        const formData = localStorage.getItem('formData');
+        return formData ? JSON.parse(formData) : [];
+    });
 
     const handleSubmit = (values) => {
         // Add the form data to the formDataArray
-        setFormDataArray([...formDataArray, values]);
+        const updatedFormDataArray = [...formDataArray, values];
+        setFormDataArray(updatedFormDataArray);
 
-        // You can handle the form submission here, e.g., sending data to an API
-        // For demo, we'll just navigate to '/products' with form data
-        navigate('/products', { state: { formData: values } });
+        // Save the form data to local storage
+        localStorage.setItem('formData', JSON.stringify(updatedFormDataArray));
+
+        // Navigate to '/products'
+        navigate('/products');
     };
 
     return (
