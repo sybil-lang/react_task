@@ -34,24 +34,22 @@ const initialValues = {
 const Main = () => {
     const navigate = useNavigate();
 
-    const [formDataArray, setFormDataArray] = useState(() => {
-        // Retrieve form data from local storage when the component mounts
-        const formData = localStorage.getItem('formData');
-        return formData ? JSON.parse(formData) : [];
-    });
+    const [formDataArray, setFormDataArray] = useState([]); // Add this line to initialize formDataArray state
 
     const handleSubmit = (values) => {
-        // Add the form data to the formDataArray
-        const updatedFormDataArray = [...formDataArray, values];
-        setFormDataArray(updatedFormDataArray);
-
-        // Save the form data to local storage
+        // Get existing form data from local storage
+        const existingFormData = JSON.parse(localStorage.getItem('formData')) || [];
+    
+        // Add the new form data to the existing array
+        const updatedFormDataArray = [...existingFormData, values];
+    
+        // Save the updated form data to local storage
         localStorage.setItem('formData', JSON.stringify(updatedFormDataArray));
-
+    
         // Navigate to '/products'
         navigate('/products');
     };
-
+    
     return (
         <Formik
             initialValues={initialValues}

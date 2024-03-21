@@ -1,10 +1,18 @@
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from 'react-router-dom';
 export default function ProductList() {
   // const formDataArray = JSON.parse(localStorage.getItem('formData')) || [];
   const [formDataArray, setFormDataArray] = useState(JSON.parse(localStorage.getItem('formData')) || []);
+  const navigate = useNavigate()
+ 
+  // Get the location object
+  const location = useLocation();
+  
+  // Access the state object from location
+  const updatedData = location.state && location.state.updatedData;
+  console.log(updatedData);
 
-
+  
   const handleDelete = (productIndex, vendorIndex, variantIndex) => {
     // Create a copy of the formDataArray
     const updatedFormDataArray = [...formDataArray];
@@ -15,10 +23,17 @@ export default function ProductList() {
     // Update the component state with the updated data
     setFormDataArray(updatedFormDataArray);
   };
-
   const handleEdit = (productIndex, vendorIndex, variantIndex) => {
-    // Implement edit functionality here
+    const editUrl = `/edit/${productIndex}/${vendorIndex}/${variantIndex}`;
+    const rowData = {
+      productName: formDataArray[productIndex].name,
+      description: formDataArray[productIndex].description,
+      vendor: formDataArray[productIndex].vendors[vendorIndex].nameV,
+      size: formDataArray[productIndex].vendors[vendorIndex].variants[variantIndex].size
+    };
+    navigate(editUrl, { state: { rowData } });
   };
+
 
   return (
     <div className="px-4 sm:px-6 lg:px-8">
@@ -43,7 +58,7 @@ export default function ProductList() {
                   <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                     Action
                   </th>
-                 
+
                 </tr>
               </thead>
               <tbody className="bg-white">
