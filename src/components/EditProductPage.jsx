@@ -47,53 +47,54 @@ export default function EditProductPage() {
 
   // Your edit page JSX code
   return (
-    <div className="max-w-md mx-auto mt-8">
-      <h1 className="text-2xl font-bold mb-4">Edit Product</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="flex flex-col">
-          <label className="text-gray-700">Product Name:</label>
-          <input 
-            type="text" 
-            name="productName" 
-            value={formData.productName} 
-            onChange={handleChange} 
-            className="form-input mt-1"
-          />
-        </div>
-        <div className="flex flex-col">
-          <label className="text-gray-700">Description:</label>
-          <input 
-            type="text" 
-            name="description" 
-            value={formData.description} 
-            onChange={handleChange} 
-            className="form-input mt-1"
-          />
-        </div>
-        <div className="flex flex-col">
-          <label className="text-gray-700">Vendor:</label>
-          <input 
-            type="text" 
-            name="vendor" 
-            value={formData.vendor} 
-            onChange={handleChange} 
-            className="form-input mt-1"
-          />
-        </div>
-        <div className="flex flex-col">
-          <label className="text-gray-700">Size:</label>
-          <input 
-            type="text" 
-            name="size" 
-            value={formData.size} 
-            onChange={handleChange} 
-            className="form-input mt-1"
-          />
-        </div>
-        <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-          Submit
-        </button>
-      </form>
-    </div>
+    <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-xl">
+    <h1 className="text-2xl font-bold mb-4">Edit Product</h1>
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="form-input-container">
+        <label className="form-label">Product Name:</label>
+        <input 
+          type="text" 
+          name="productName" 
+          value={formData.productName} 
+          onChange={handleChange} 
+          className="form-input px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+        />
+      </div>
+      <div className="form-input-container">
+        <label className="form-label">Description:</label>
+        <input 
+          type="text" 
+          name="description" 
+          value={formData.description} 
+          onChange={handleChange} 
+          className="form-input px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+        />
+      </div>
+      <div className="form-input-container">
+        <label className="form-label">Vendor:</label>
+        <input 
+          type="text" 
+          name="vendor" 
+          value={formData.vendor} 
+          onChange={handleChange} 
+          className="form-input px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+        />
+      </div>
+      <div className="form-input-container">
+        <label className="form-label">Size:</label>
+        <input 
+          type="text" 
+          name="size" 
+          value={formData.size} 
+          onChange={handleChange} 
+          className="form-input px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+        />
+      </div>
+      <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        Submit
+      </button>
+    </form>
+  </div>
+  
   );
 }

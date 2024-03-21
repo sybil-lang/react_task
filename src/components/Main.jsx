@@ -66,7 +66,7 @@ const Main = () => {
                             type="text"
                             id="name"
                             name="name"
-                            className="mt-1 block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 rounded-md"
+                            className="form-input px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                         />
                         {errors.name && (
                             <p className="mt-2 text-sm text-red-600" id="name-error">
@@ -82,7 +82,7 @@ const Main = () => {
                             as="textarea"
                             id="description"
                             name="description"
-                            className="mt-1 block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 rounded-md"
+                            className="form-input px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                         />
                         {errors.description && (
                             <p className="mt-2 text-sm text-red-600" id="description-error">
@@ -118,7 +118,7 @@ const Main = () => {
                                                 type="text"
                                                 id={`vendors.${index}.nameV`}
                                                 name={`vendors.${index}.nameV`}
-                                                className="mt-1 block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 rounded-md"
+                                                className="form-input px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                                             />
                                             {errors.vendors && errors.vendors[index] && errors.vendors[index].nameV && (
                                                 <p className="mt-2 text-sm text-red-600" id={`vendors.${index}.nameV-error`}>
@@ -143,7 +143,7 @@ const Main = () => {
                                                                         type="number"
                                                                         id={`vendors.${index}.variants.${vIndex}.size`}
                                                                         name={`vendors.${index}.variants.${vIndex}.size`}
-                                                                        className="mt-1 block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 rounded-md"
+                                                                        className="form-input px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                                                                     />
                                                                     {errors.vendors && errors.vendors[index] && errors.vendors[index].variants && errors.vendors[index].variants[vIndex] && errors.vendors[index].variants[vIndex].size && (
                                                                         <p className="mt-2 text-sm text-red-600" id={`vendors.${index}.variants.${vIndex}.size-error`}>
