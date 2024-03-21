@@ -161,7 +161,7 @@ export default function App() {
             <div className="flex h-16 shrink-0 items-center">
               <img
                 className="h-8 w-auto"
-                src="https://tailwindui.com/img/logos/mark.svg?color=white"
+                src="/vite.svg"
                 alt="Your Company"
               />
             </div>
