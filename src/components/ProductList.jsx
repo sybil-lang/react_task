@@ -10,19 +10,26 @@ export default function ProductList() {
   
   // Access the state object from location
   const updatedData = location.state && location.state.updatedData;
-  console.log(updatedData);
-  // useEffect(() => {
-  //   if (updatedData) {
-  //     // Find the index of the product, vendor, and variant to be updated
-  //     const { productIndex, vendorIndex, variantIndex, updatedFormData } = updatedData;
-  //     // Update the corresponding values in the formDataArray
-  //     const updatedArray = [...formDataArray];
-  //     updatedArray[productIndex].vendors[vendorIndex].variants[variantIndex] = updatedFormData;
-  //     // Update the state and localStorage with the updated data
-  //     setFormDataArray(updatedArray);
-  //     localStorage.setItem('formData', JSON.stringify(updatedArray));
-  //   }
-  // }, [updatedData, formDataArray]);
+ 
+  useEffect(() => {
+    if (location.state && location.state.updatedData) {
+      // Update formDataArray with the updated data
+      setFormDataArray(prevData => [
+        ...(prevData || []),
+        location.state.updatedData
+      ]);
+    }
+  }, [location.state]);
+  
+  useEffect(() => {
+    console.log(formDataArray);
+  }, [formDataArray]);
+  
+
+  // Check if formDataArray is undefined or not an array before mapping
+  if (!Array.isArray(formDataArray) || formDataArray.length === 0) {
+    return <div>No data available.</div>;
+  }
   
   const handleDelete = (productIndex, vendorIndex, variantIndex) => {
     // Create a copy of the formDataArray
@@ -74,7 +81,7 @@ export default function ProductList() {
               </thead>
               <tbody className="bg-white">
                 {formDataArray.map((formData, productIndex) => (
-                  formData?.vendors.map((vendor, vendorIndex) => (
+                  formData?.vendors?.map((vendor, vendorIndex) => (
                     vendor.variants.map((variant, variantIndex) => (
                       <tr key={`${productIndex}-${vendorIndex}-${variantIndex}`} className="even:bg-gray-50">
                         <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3">
