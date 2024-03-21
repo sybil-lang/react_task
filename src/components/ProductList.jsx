@@ -4,13 +4,13 @@ export default function ProductList() {
   // const formDataArray = JSON.parse(localStorage.getItem('formData')) || [];
   const [formDataArray, setFormDataArray] = useState(JSON.parse(localStorage.getItem('formData')) || []);
   const navigate = useNavigate()
- 
+
   // Get the location object
   const location = useLocation();
-  
+
   // Access the state object from location
   const updatedData = location.state && location.state.updatedData;
- 
+
   useEffect(() => {
     if (location.state && location.state.updatedData) {
       // Update formDataArray with the updated data
@@ -20,17 +20,17 @@ export default function ProductList() {
       ]);
     }
   }, [location.state]);
-  
+
   useEffect(() => {
     console.log(formDataArray);
   }, [formDataArray]);
-  
+
 
   // Check if formDataArray is undefined or not an array before mapping
   if (!Array.isArray(formDataArray) || formDataArray.length === 0) {
     return <div>No data available.</div>;
   }
-  
+
   const handleDelete = (productIndex, vendorIndex, variantIndex) => {
     // Create a copy of the formDataArray
     const updatedFormDataArray = [...formDataArray];
@@ -104,6 +104,7 @@ export default function ProductList() {
                     ))
                   ))
                 ))}
+
               </tbody>
             </table>
           </div>
